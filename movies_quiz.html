@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <title> JavaScript Quiz (Movies of India) </title>
+</head>
+
+
+<script>
+   //****************************************************
+//  This block helps to catch the syntax errors.
+//  These errors are reported back to the web page
+//****************************************************
+      window.onerror = function(e) {
+        document.write('There\'s an error: ', e, '</br>')
+     };
+   </script>
+
+   <!--**************************************************** -->
+   <!--This is the tool bar-->
+   <!--**************************************************** -->
+<style>
+   #table_1 {
+      border-spacing: 200px 0px;
+         }
+
+</style>
+   <table id = "table_1">
+      <tr>
+         <td>
+                  <a href = "index.html"  title = "SILC Quiz Master"> 
+                       <image id="silc" src="Images/index_images/silc_home.jpg"></image>
+                   </a>
+          </td>
+          <!--Link To Preferences-->
+          <td id = "text"><a href = "">Preferences</a></td>
+          <!--Link To About-->
+          <td id = "text"><a href = "about.html">About</a></td>
+          <!--Link To Help-->
+          <td id = "text"><a href = "help.html">Help</a></td>
+      </tr>
+   </table>
+<body>
+
+   <!--**************************************************** -->
+   <!-- This is a placeholder question.  -->
+   <!-- This will be replaced by a random question -->
+   <!-- when the page first loads up.  -->
+   <!-- **************************************************** -->
+
+   <p><img id="q_image" src="Images\movies\baahubali.jpg" style="max-height:250px;width:auto;" alt="img not found" /></p>
+   <p id="question"> Dummy question </p>
+   <form>
+      <input type="radio" name="choices" id="choice_1" value="A" onclick="updateGivenAnswer(this.value)" />
+      <label for="choice_1" id="choice_1_label"> choice 1 </label>
+      <br>
+      <input type="radio" name="choices" id="choice_2" value="B" onclick="updateGivenAnswer(this.value)" />
+      <label for="choice_2" id="choice_2_label"> choice 2 </label>
+      <br>
+      <input type="radio" name="choices" id="choice_3" value="C" onclick="updateGivenAnswer(this.value)" />
+      <label for="choice_3" id="choice_3_label"> choice 3 </label>
+      <br>
+      <input type="radio" name="choices" id="choice_4" value="D" onclick="updateGivenAnswer(this.value)" />
+      <label for="choice_4" id="choice_4_label"> choice 4 </label>
+      <br>
+   </form>
+
+</body>
+
+<!-- **************************************************** -->
+<!--   Add three buttons "Previous", "Submit", "Next" -->
+<!--   TODO: These will be enabled / disabled based on how many questions are answered. -->
+<!-- **************************************************** -->
+
+<button id="previousBtn" type="button">
+   Previous
+</button>
+
+<button id="submitBtn" type="button" disabled>
+   Submit
+</button>
+
+<button id="nextBtn" type="button">
+   Next
+</button>
+
+</body>
+
+<script>
+   //**********************************************
+   // STEP 1:  Assign the Event Listeners to the three buttons
+   //          Also attach the Event Listern to the radio buttons
+   //**********************************************
+
+   var next_btn = document.getElementById("nextBtn");
+   if (next_btn) {
+      next_btn.addEventListener("click", showNextQuestion);
+   }
+
+   var previous_btn = document.getElementById("previousBtn");
+   if (previous_btn) {
+      previous_btn.addEventListener("click", showPreviousQuestion);
+   }
+
+   var submit_btn = document.getElementById("submitBtn");
+   if (submit_btn) {
+      submit_btn.addEventListener("click", showResults);
+   }
+
+   //**********************************************
+   // STEP 2:  Establish the contract for QUESTION object
+   //**********************************************
+
+   /* This is our contract for the Question Object
+   topic
+   question
+   choice_1
+   choice_2
+   choice_3
+   choice_4
+   answer
+   image
+   given_answer
+   */
+
+   // Object constructor function and methods
+   function Question(x_topic, x_question, x_a, x_b, x_c, x_d, x_answer, x_image, x_given_answer) {
+      this.topic = x_topic;
+      this.question = x_question;
+      this.choice_1 = x_a;
+      this.choice_2 = x_b;
+      this.choice_3 = x_c;
+      this.choice_4 = x_d;
+      this.answer = x_answer;
+      this.image = x_image;
+      this.given_answer = x_given_answer;
+
+      this.toString = function () {
+         document.write("<br><br> ");
+         document.write("<br>" + this.topic);
+         document.write("<br>" + this.question);
+         document.write("<br>" + this.choice_1);
+         document.write("<br>" + this.choice_2);
+         document.write("<br>" + this.choice_3);
+         document.write("<br>" + this.choice_4);
+         document.write("<br>" + this.answer);
+         document.write("<br>" + this.image);
+         document.write("<br>" + this.given_answer + "<br>");
+      }
+      
+   }
+
+   //**********************************************
+   // STEP 3:  Create 20 Questions per the above contract
+   // TODO: Only 10 are created as of now; 10 pending to be done
+   // NOTE: for this topic, images are stored in images/dresses folder
+   //**********************************************
+
+   var q1 = new Question("Movies of India",
+      "What movie, based on a true story, called?",
+      "Agent Vinod",
+      "Raazi",
+      "Madras Cafe",
+      "Skyfall",
+      "B",
+      "raazi.jpg",
+      "X");
+   var q2 = new Question("Movies of India",
+      "What language was Baahubali originally made in?",
+      "Hindi",
+      "Tamil",
+      "Telegu",
+      "Gujarati",
+      "C",
+      "baahubali.jpg",
+      "X");
+   var q3 = new Question("Movies of India",
+      "Who is the actress in this movie, Padmavat?",
+      "Priyanka Chopra",
+      "Deepika Kakkar",
+      "Anushka Sharma",
+      "Deepika Padukone",
+      "D",
+      "padmaavat.jpg",
+      "X");
+   var q4 = new Question("Movies of India",
+      "Who is this famous actress that recently passed away in February 2018?",
+      "Helen",
+      "Lata Mangeshkar",
+      "Sridevi",
+      "Jhanvi Kapoor",
+      "C",
+      "sridevi.jpg",
+      "X");
+   var q5 = new Question("Movies of India",
+      "What movie is this scene from?",
+      "Raees",
+      "Main Hoon Na",
+      "Baazigar",
+      "Deewana",
+      "B",
+      "mainhoona.jpg",
+      "X");
+   var q6 = new Question("Movies of India",
+      "Who is this singer?",
+      "Asha Bhosle",
+      "Shreya Goshal",
+      "Lata Mangeshkar",
+      "Sonu Nigam",
+      "C",
+      "latamang.jpg",
+      "X");
+   var q7 = new Question("Movies of India",
+      "What movie is this scene from?",
+      "Om Shanti Om",
+      "Shanti",
+      "Yes Boss",
+      "Tilak",
+      "A",
+      "omshantiom.cms",
+      "X");
+   var q8 = new Question("Movies of India",
+      "Who is the actress in this recent movie?",
+      "Kareena Kapoor",
+      "Sara Ali Khan",
+      "Khushi Kapoor",
+      "Sejal Ali Khan",
+      "B",
+      "simmba.jpg",
+      "X");
+   var q9 = new Question("Movies of India",
+      "What is this movie that is based off of the hollywood movie,Pirates of the Caribbea?",
+      "Thugs of Bharat",
+      "Pirates of India",
+      "Thugs of Hindostan",
+      "Sea Fighters",
+      "C",
+      "thugs.jpg",
+      "X");
+   var q10 = new Question("Movies of India",
+      "Which movie of the Race sequels is this?",
+      "Race",
+      "Race 2",
+      "Race 3",
+      "Race 4",
+      "C",
+      "race.jpg",
+      "X");
+   var q11 = new Question("Movies of India",
+      "Who is this Bollywood producer and director",
+      "Rohit Shetty",
+      "Rohit Patel",
+      "Rohan shetty",
+      "Rohan Patel",
+      "A",
+      "rohit.jpg",
+      "X");
+   var q12 = new Question("Movies of India",
+      "Whhat is this movie?", 
+      "Bhagban",
+      "Dhadak",
+      "Dil",
+      "Dilwale",
+      "D",
+      "dilwale.jpg",
+      "X");
+   var q13 = new Question("Movies of India",
+      "What movie, Based off of the Hollywood movie When Harry Met Sally, called?",
+      "When Harry met Sejal",
+      "Jab Harry met Sejal",
+      "Jab Harrinder met Sejal",
+      "When Harrinder met sally",
+      "B",
+      "harrysejal.jpg",
+      "X");
+   var q14 = new Question("Movies of India",
+      "Who are the actors in these movies?",
+      "Alia Bhatt and SRK",
+      "Shraddha Kapoor and Varun Dhawan",
+      "Anushka Sharma and Salman Khan",
+      "Alia Bhatt and Varun Dhawan",
+      "D",
+      "bandh.jpg",
+      "X");
+   var q15 = new Question("Movies of India",
+      "What was the name of the alien in Koi Mil Gaya?",
+      "Jadoo",
+      "Roy",
+      "E.T.",
+      "Baloo",
+      "A",
+      "koimilgaya.jpg",
+      "X");
+   var q16 = new Question("Movies of India",
+      "What was Hrithik Roshan's first movie?",
+      "Khabhi Khushi Khabhi Gham",
+      "Kaho Naa Pyaar Hai",
+      "Krrish",
+      "Dhoom",
+      "B",
+      "kaho.jpg",
+      "X");
+   var q17 = new Question("Movies of India",
+      "Who is this actress?",
+      "Anushka Sharma",
+      "Phulkari Dupatta",
+      "Aishwariya Rai Bachchan",
+      "Malika arora",
+      "C",
+      "aish.jpg",
+      "X");
+   var q18 = new Question("Movies of India",
+      "What is Tabu's real name?",
+      "Tabassum Fatima Hashmi",
+      "Taslim Khan",
+      "Tabakul",
+      "Tabiman Merchant",
+      "A",
+      "tabu.jpg",
+      "X");
+   var q19 = new Question("Movies of India",
+      "Who was the actor in Detective Byomkesh Bakshy?",
+      "Salman Khan",
+      "Sushant Singh Rajput",
+      "Neeraj Gopal",
+      "Aanand Singh",
+      "B",
+      "bb.jpg",
+      "X");
+   var q20 = new Question("Movies of India",
+      "Who are the lead actresses in Dil to Pagal Hai?",
+      "Madhuri Kapoor and Karishma Dixit",
+      "Mahima Rajput and Alia Sharma",
+      "Madhri Dixit and Karishma Kapoor",
+      "Karishma Sharma and Purvi",
+      "C",
+      "dtph.jpg",
+      "X");
+
+   //**********************************************
+   // STEP 4:  Create an array to hold all the above questions
+   //**********************************************
+
+   var question_bank = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20];
+
+   //**********************************************
+   // STEP 5:  set HOW_MANY=5 questions
+   // This constant will be used to select that many questions from the question bank 
+   //**********************************************
+   var HOW_MANY = 20;
+
+   //**********************************************
+   // STEP 6:  Shuffle/Randomize the Array
+   // Reference: https://javascript.info/task/shuffle 
+   //**********************************************
+   function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+         let j = Math.floor(Math.random() * (i + 1));
+         [array[i], array[j]] = [array[j], array[i]];
+      }
+   }
+   // for debugging purposes, disable shuffle for the timebeing
+    //shuffle(question_bank);
+
+   //**********************************************
+   // STEP 7:  Select HOW_MANY questions 
+   //**********************************************
+   var mini_question_bank = question_bank.slice(0, HOW_MANY);
+
+
+
+   //**********************************************
+   // STEP 8:  Display the first question 
+   //          from the mini_question_bank 
+   // A random question will then show up when the page first loads up.
+   //**********************************************
+   // we need to keep track of where we are in the question order
+   var index = 0;
+   updateQuestion(index);
+
+
+   //**********************************************
+   // STEP 9:  Implement the Next Button
+   //**********************************************
+
+   function showNextQuestion() {
+      index = index + 1;
+      updateQuestion(index);
+   }
+
+
+   //**********************************************
+   // STEP 10:  Implement the Previous Button
+   //**********************************************
+
+   function showPreviousQuestion() {
+      index = index - 1;
+      updateQuestion(index);
+   }
+
+
+   //**********************************************
+   // STEP 11:  Implement the Submit Button
+   //**********************************************
+
+   // Loop through the mini_question_object
+   // compare the given_answers with the correct answer
+   // keep counting the correct answers
+   // publish the score to the user
+   function showResults() {
+
+         var count = 0;
+         for (var i = 0; i < mini_question_bank.length; i++) {
+            if (mini_question_bank[i].answer == mini_question_bank[i].given_answer) {
+               count = count + 1;
+            }
+         }
+         document.write("<style> #table_1 {border-spacing: 200px 0px;} .congrats { text-align: center; } #congratsi {height: 200px; width: 200px; display: block; margin-left: auto; margin-right: auto;}</style>");
+         document.write("<table id = 'table_1'><tr><td><image id = 'silc' src='Images/index_images/silc_home.jpg'></image></td><td id = 'text'><a href = 'about.html'>About</a></td><td id = 'text'><a href = 'help.html'>Help</a></td></tr></table>");
+         document.write("<br> <p class = 'congrats' >Congratulations</p>");
+         document.write("<image id = 'congratsi' src='Images/about_images/thumbsup.jpg'></image>")
+         document.write("<p class = 'congrats'>Your final score: ", count, " out of ", HOW_MANY, "</p>");
+   }
+
+
+   //**********************************************
+   // STEP 12:  This is the common function called by 
+   //           Page Load, Previous and Next buttons
+   //**********************************************
+
+   function updateQuestion(selected_question) {
+      // Get the Question at the bookmark/index
+      var selected_question = mini_question_bank[index];
+
+      // now update the default question with the selected question
+      document.getElementById("question").innerHTML = selected_question.question;
+      document.getElementById("choice_1_label").innerHTML = selected_question.choice_1;
+      document.getElementById("choice_2_label").innerHTML = selected_question.choice_2;
+      document.getElementById("choice_3_label").innerHTML = selected_question.choice_3;
+      document.getElementById("choice_4_label").innerHTML = selected_question.choice_4;
+      document.getElementById("q_image").src = "Images\\movies\\" + selected_question.image;
+
+
+      // Do not carry forward the previous selection on the radio buttons
+      // If the user has not selected any answer yet, then unset all the radio buttons
+      // If the user changes the answer, then the corresponding radio button event will update the answer
+      if (selected_question.given_answer == "X") {
+         // if the given_answer is X, unselect all
+         document.getElementById("choice_1").checked = false;
+         document.getElementById("choice_2").checked = false;
+         document.getElementById("choice_3").checked = false;
+         document.getElementById("choice_4").checked = false;
+      } 
+
+      // If the question already has an answer, then show that answer
+      if (selected_question.given_answer == "A") {
+         document.getElementById("choice_1").checked = true;
+      } else
+      if (selected_question.given_answer == "B") {
+         document.getElementById("choice_2").checked = true;
+      } else
+      if (selected_question.given_answer == "C") {
+         document.getElementById("choice_3").checked = true;
+      } else
+      if (selected_question.given_answer == "D") {
+         document.getElementById("choice_4").checked = true;
+      }
+      // once the question is updated, validate all the three buttons
+      validateButtons();
+   }
+
+
+   
+   //**********************************************
+   // LAST STEP:  All the supporting functions are here
+   //********************************************** 
+
+   // When the user presses the radio button
+   // We need to update the Question object with the given_answer
+   // this function will be invoked whenever the user selects a choice
+   // we also need to validate the buttons here
+   // since the SUBMIT button may have to be enabled
+   function updateGivenAnswer(value) {
+      mini_question_bank[index].given_answer = value;
+      validateButtons();
+   }
+
+   // Validation of all the three buttons - Previous, Submit and Next - happen here
+   // Validation depends on the index and whether all questions are answered by the user
+   function validateButtons() {
+      // if index == 0, disable the previous button
+      if (index == 0) {
+         previous_btn.disabled = true;
+      } else {
+         previous_btn.disabled = false;
+      }
+
+      // if index == HOW_MANY, disable the next button
+      if (index == HOW_MANY-1) {
+         next_btn.disabled = true;
+      } else {
+         next_btn.disabled = false;
+      }
+
+      // if all questions are answered, then enable the submit button
+      var are_all_questions_answered = true;
+      for (var i=0; i < mini_question_bank.length; i=i+1)
+      {
+         if (mini_question_bank[i].given_answer == "X")
+         {
+            are_all_questions_answered = false;
+            break;
+         }
+      }
+
+      if (are_all_questions_answered)
+      {
+         submit_btn.disabled = false;
+      }
+   }
+</script>

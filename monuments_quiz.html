@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <title> JavaScript Quiz (Monuments of India) </title>
+</head>
+
+
+<script>
+   //****************************************************
+//  This block helps to catch the syntax errors.
+//  These errors are reported back to the web page
+//****************************************************
+      window.onerror = function(e) {
+        document.write('There\'s an error: ', e, '</br>')
+     };
+   </script>
+
+   <!--**************************************************** -->
+   <!--This is the tool bar-->
+   <!--**************************************************** -->
+<style>
+   #table_1 {
+      border-spacing: 200px 0px;
+         }
+
+</style>
+    <table id = "table_1">
+         <tr>
+            <td>
+                     <a href = "index.html"  title = "SILC Quiz Master"> 
+                          <image id="silc" src="Images/index_images/silc_home.jpg"></image>
+                      </a>
+             </td>
+             <!--Link To Preferences-->
+             <td id = "text"><a href = "">Preferences</a></td>
+             <!--Link To About-->
+             <td id = "text"><a href = "about.html">About</a></td>
+             <!--Link To Help-->
+             <td id = "text"><a href = "help.html">Help</a></td>
+         </tr>
+      </table>
+<body>
+
+   <!--**************************************************** -->
+   <!-- This is a placeholder question.  -->
+   <!-- This will be replaced by a random question -->
+   <!-- when the page first loads up.  -->
+   <!-- **************************************************** -->
+
+   <p><img id="q_image" src="images\monuments\tajmahal.jpg" style="max-height:250px;width:auto;" alt="img not found" /></p>
+   <p id="question"> Dummy question </p>
+   <form>
+      <input type="radio" name="choices" id="choice_1" value="A" onclick="updateGivenAnswer(this.value)" />
+      <label for="choice_1" id="choice_1_label"> choice 1 </label>
+      <br>
+      <input type="radio" name="choices" id="choice_2" value="B" onclick="updateGivenAnswer(this.value)" />
+      <label for="choice_2" id="choice_2_label"> choice 2 </label>
+      <br>
+      <input type="radio" name="choices" id="choice_3" value="C" onclick="updateGivenAnswer(this.value)" />
+      <label for="choice_3" id="choice_3_label"> choice 3 </label>
+      <br>
+      <input type="radio" name="choices" id="choice_4" value="D" onclick="updateGivenAnswer(this.value)" />
+      <label for="choice_4" id="choice_4_label"> choice 4 </label>
+      <br>
+   </form>
+
+</body>
+
+<!-- **************************************************** -->
+<!--   Add three buttons "Previous", "Submit", "Next" -->
+<!--   TODO: These will be enabled / disabled based on how many questions are answered. -->
+<!-- **************************************************** -->
+
+<button id="previousBtn" type="button">
+   Previous
+</button>
+
+<button id="submitBtn" type="button" disabled>
+   Submit
+</button>
+
+<button id="nextBtn" type="button">
+   Next
+</button>
+
+</body>
+
+<script>
+   //**********************************************
+   // STEP 1:  Assign the Event Listeners to the three buttons
+   //          Also attach the Event Listern to the radio buttons
+   //**********************************************
+
+   var next_btn = document.getElementById("nextBtn");
+   if (next_btn) {
+      next_btn.addEventListener("click", showNextQuestion);
+   }
+
+   var previous_btn = document.getElementById("previousBtn");
+   if (previous_btn) {
+      previous_btn.addEventListener("click", showPreviousQuestion);
+   }
+
+   var submit_btn = document.getElementById("submitBtn");
+   if (submit_btn) {
+      submit_btn.addEventListener("click", showResults);
+   }
+
+   //**********************************************
+   // STEP 2:  Establish the contract for QUESTION object
+   //**********************************************
+
+   /* This is our contract for the Question Object
+   topic
+   question
+   choice_1
+   choice_2
+   choice_3
+   choice_4
+   answer
+   image
+   given_answer
+   */
+
+   // Object constructor function and methods
+   function Question(x_topic, x_question, x_a, x_b, x_c, x_d, x_answer, x_image, x_given_answer) {
+      this.topic = x_topic;
+      this.question = x_question;
+      this.choice_1 = x_a;
+      this.choice_2 = x_b;
+      this.choice_3 = x_c;
+      this.choice_4 = x_d;
+      this.answer = x_answer;
+      this.image = x_image;
+      this.given_answer = x_given_answer;
+
+      this.toString = function () {
+         document.write("<br><br> ");
+         document.write("<br>" + this.topic);
+         document.write("<br>" + this.question);
+         document.write("<br>" + this.choice_1);
+         document.write("<br>" + this.choice_2);
+         document.write("<br>" + this.choice_3);
+         document.write("<br>" + this.choice_4);
+         document.write("<br>" + this.answer);
+         document.write("<br>" + this.image);
+         document.write("<br>" + this.given_answer + "<br>");
+      }
+      
+   }
+
+   //**********************************************
+   // STEP 3:  Create 20 Questions per the above contract
+   // TODO: Only 10 are created as of now; 10 pending to be done
+   // NOTE: for this topic, images are stored in images/dances folder
+   //**********************************************
+
+
+   var q1 = new Question("Monuments of India",
+      "What is a white monument that is located  on the southern bank of Yamuna river in city of Agra?",
+      "Taj Mahal",
+      "Ajanta caves",
+      "Gol Gumbaz",
+      "Qutab Shahi tombs",
+      "A",
+      "tajmahal.jpg",
+      "X");
+   var q2 = new Question("Monuments of India",
+      "This palace is one the principal tourist attractions in Jaipur and known for its artistic Hindu style. What is it?",
+      "Buria Fort",
+      "Jind Fort",
+      "Amber Fort",
+      "Bahu Fort",
+      "C",
+      "Amerfort.jpg",
+      "X");
+   var q3 = new Question("Monuments of India",
+      "What is the holiest Sikh Gurudwara and is located in the city of Amritsar, Punjab?",
+      "Omkareshwar",
+      "The Golden Temple",
+      "Laxminarayan temple",
+      "Yamunotri temple",
+      "B",
+      "goldentemple.jpg",
+      "X");
+   var q4 = new Question("Monuments of India",
+      "Based in Delhi, it is one of the largest temple complexes in India. What is it?",
+      "Brahmeswara temple",
+      "Yogmaya temple",
+      "Akshardham Swaminarayan temple",
+      "Ganesha temple",
+      "C",
+      "akshardham.jpg",
+      "X");
+   var q5 = new Question("Monuments of India",
+      "One of the largest forts in India is located in Jodhpur city of Rajasthan. What is it called?",
+      "Kotla Fort",
+      "Mehrangarh Fort",
+      "Mora Fort",
+      "Mundru Fort",
+      "B",
+      "mehrangarhfort.jpg",
+      "X");
+   var q6 = new Question("Monuments of India",
+      "This is the second tallest free standing stone structure in India. What is it?",
+      "Chand Minar",
+      "Qutab Minar",
+      "Jhulta Minar",
+      "Ek minar Raichur",
+      "B",
+      "qutubminar.jpg",
+      "X");
+   var q7 = new Question("Monuments of India",
+      "It is one the forts of Shivaji in Western India, Also called red fort due to its distinctive color. What is it?",
+      "Tiracol Fort",
+      "Red Fort",
+      "Ponda Fort",
+      "Toaham Fort",
+      "C",
+      "ponda.jpg",
+      "X");
+   var q8 = new Question("Monuments of India",
+      "This temple is the most visited tourist attraction in Thanjavur. What is it?",
+      "Brihadeeshwara Temple",
+      "Chaturdasha Temple",
+      "Samaleswari Temple",
+      "Hindu Temple",
+      "A",
+      "brihadeeshwara.jpg",
+      "X");
+   var q9 = new Question("Monuments of India",
+      "This is a war memorial, also known as All India War Memorial. What is it?",
+      "Bhadkal Gate",
+      "Great Gate",
+      "India Gate",
+      "Lahori Gate",
+      "C",
+      "indiagate.jpg",
+      "X");
+   var q10 = new Question("Monuments of India",
+      "This is listed as one of the 7 wonders of India and is in a shape of a gigantic chariot. What is it?",
+      "Kailasanathar Temple",
+      "Konark Sun Temple",
+      "Sri Ranganathaswamy Temple",
+      "Brahmeswara Temple",
+      "B",
+      "konark.jpg",
+      "X");
+   var q11 = new Question("Monuments of India",
+      "This monument is referred to as the Taj Mahal of Mumbai and is one of the city’s top tourist attractions. What is it?",
+      "Gateway of India",
+      "Great Gate",
+      "Lahori Gate",
+      "Bhadkal Gate",
+      "A",
+      "gateway.jpg",
+      "X");
+   var q12 = new Question("Monuments of India",
+      "This is a global icon for Hyderabad and is one of the major attaractions in the newly formed state of Telangana. What is it?",
+      "Charminar",
+      "Taj Mahal",
+      "Amber Palace",
+      "Red Fort",
+      "A",
+      "charminar.jpg",
+      "X");
+   var q13 = new Question("Monuments of India",
+      "This fort is located in Delhi and is named for its massive enclosing walls of red sandstone. What is it?",
+      "Red Fort",
+      "Agra Fort",
+      "Ponda Fort",
+      "Tiracol Fort",
+      "A",
+      "redfort.jpg",
+      "X");
+   var q14 = new Question("Monuments of India",
+      "What is located on the island of Jag Niwas in Lake Pichila?",
+      "Lake Palace",
+      "Amber Palace",
+      "Bangalore Palace",
+      "Marble Palace",
+      "A",
+      "lakepalace.jpg",
+      "X");
+   var q15 = new Question("Monuments of India",
+      "This is one of the most popular tourist attractions in Mysore and is a famous landmark in India?",
+      "Mysore Palace",
+      "Taj Lake Palace",
+      "King Kothi Palace",
+      "Lalgarh Palace",
+      "A",
+      "mysorepalace.jpg",
+      "X");
+   var q16 = new Question("Monuments of India",
+      "This was the first garden-tomb on the Indian subcontinent and is one of the best Mughal gardens in India. What is it?",
+      "Bibi Ka Maqbara",
+      "Ajanta caves",
+      "Taj Mahal",
+      "Humayun’s Tomb",
+      "D",
+      "humayuntomb.jpg",
+      "X");
+   var q17 = new Question("Monuments of India",
+      "This is one of the 4 holy sites related to the life of the Lord Buddha, located in Bodhgaya in Gaya, what is it?",
+      "Mahabodhi Temple",
+      "Brahmeswara Temple",
+      "Hindu Temple",
+      "Yogaya Temple",
+      "A",
+      "mahabodhi.jpg",
+      "X");
+   var q18 = new Question("Monuments of India",
+      "This is a significant symbol for the Tamil people and is the most prominent landmark and tourist attraction in the city. What is it?",
+      "The Golden Temple",
+      "Ganesha Temple",
+      "Meenakshi Amman Temple",
+      "Laxminarayan Temple",
+      "C",
+      "meenakshi.jpg",
+      "X");
+   var q19 = new Question("Monuments of India",
+      "What is the richest temple in India and is one of the most visited places of worship in India?",
+      "Konark Sun Temple",
+      "Samaleswari Temple",
+      "Chaturdasha Temple",
+      "Tirumala Venkateswara Temple",
+      "D",
+      "Tirumala.jpg",
+      "X");
+   var q20 = new Question("Monuments of India",
+      "It is also called the Palace of Winds and is one of the prominent tourist attractions on Jaipur city. What is it?",
+      "Hawa Mahal",
+      "Taj Mahal",
+      "Agra Fort",
+      "Chand Minar",
+      "A",
+      "hawamahal.jpg",
+      "X");
+
+
+   //**********************************************
+   // STEP 4:  Create an array to hold all the above questions
+   //**********************************************
+
+   var question_bank = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20];
+
+   //**********************************************
+   // STEP 5:  set HOW_MANY=5 questions
+   // This constant will be used to select that many questions from the question bank 
+   //**********************************************
+   var HOW_MANY = 20;
+
+   //**********************************************
+   // STEP 6:  Shuffle/Randomize the Array
+   // Reference: https://javascript.info/task/shuffle 
+   //**********************************************
+   function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+         let j = Math.floor(Math.random() * (i + 1));
+         [array[i], array[j]] = [array[j], array[i]];
+      }
+   }
+   // for debugging purposes, disable shuffle for the timebeing
+   // shuffle(question_bank);
+
+   //**********************************************
+   // STEP 7:  Select HOW_MANY questions 
+   //**********************************************
+   var mini_question_bank = question_bank.slice(0, HOW_MANY);
+
+
+
+   //**********************************************
+   // STEP 8:  Display the first question 
+   //          from the mini_question_bank 
+   // A random question will then show up when the page first loads up.
+   //**********************************************
+   // we need to keep track of where we are in the question order
+   var index = 0;
+   updateQuestion(index);
+
+
+   //**********************************************
+   // STEP 9:  Implement the Next Button
+   //**********************************************
+
+   function showNextQuestion() {
+      index = index + 1;
+      updateQuestion(index);
+   }
+
+
+   //**********************************************
+   // STEP 10:  Implement the Previous Button
+   //**********************************************
+
+   function showPreviousQuestion() {
+      index = index - 1;
+      updateQuestion(index);
+   }
+
+
+   //**********************************************
+   // STEP 11:  Implement the Submit Button
+   //**********************************************
+
+   // Loop through the mini_question_object
+   // compare the given_answers with the correct answer
+   // keep counting the correct answers
+   // publish the score to the user
+   function showResults() {
+
+      var count = 0;
+      for (var i = 0; i < mini_question_bank.length; i++) {
+         if (mini_question_bank[i].answer == mini_question_bank[i].given_answer) {
+            count = count + 1;
+         }
+      }
+      document.write("<style> #table_1 {border-spacing: 200px 0px;} .congrats { text-align: center; } #congratsi {height: 200px; width: 200px; display: block; margin-left: auto; margin-right: auto;}</style>");
+      document.write("<table id = 'table_1'><tr><td><image id = 'silc' src='Images/index_images/silc_home.jpg'></image></td><td id = 'text'><a href = 'about.html'>About</a></td><td id = 'text'><a href = 'help.html'>Help</a></td></tr></table>");
+      document.write("<br> <p class = 'congrats' >Congratulations</p>");
+      document.write("<image id = 'congratsi' src='Images/about_images/thumbsup.jpg'></image>")
+      document.write("<p class = 'congrats'>Your final score: ", count, " out of ", HOW_MANY, "</p>");
+   }
+
+
+   //**********************************************
+   // STEP 12:  This is the common function called by 
+   //           Page Load, Previous and Next buttons
+   //**********************************************
+
+   function updateQuestion(selected_question) {
+      // Get the Question at the bookmark/index
+      var selected_question = mini_question_bank[index];
+
+      // now update the default question with the selected question
+      document.getElementById("question").innerHTML = selected_question.question;
+      document.getElementById("choice_1_label").innerHTML = selected_question.choice_1;
+      document.getElementById("choice_2_label").innerHTML = selected_question.choice_2;
+      document.getElementById("choice_3_label").innerHTML = selected_question.choice_3;
+      document.getElementById("choice_4_label").innerHTML = selected_question.choice_4;
+      document.getElementById("q_image").src = "Images\\monuments\\" + selected_question.image;
+
+
+      // Do not carry forward the previous selection on the radio buttons
+      // If the user has not selected any answer yet, then unset all the radio buttons
+      // If the user changes the answer, then the corresponding radio button event will update the answer
+      if (selected_question.given_answer == "X") {
+         // if the given_answer is X, unselect all
+         document.getElementById("choice_1").checked = false;
+         document.getElementById("choice_2").checked = false;
+         document.getElementById("choice_3").checked = false;
+         document.getElementById("choice_4").checked = false;
+      } 
+
+      // If the question already has an answer, then show that answer
+      if (selected_question.given_answer == "A") {
+         document.getElementById("choice_1").checked = true;
+      } else
+      if (selected_question.given_answer == "B") {
+         document.getElementById("choice_2").checked = true;
+      } else
+      if (selected_question.given_answer == "C") {
+         document.getElementById("choice_3").checked = true;
+      } else
+      if (selected_question.given_answer == "D") {
+         document.getElementById("choice_4").checked = true;
+      }
+      // once the question is updated, validate all the three buttons
+      validateButtons();
+   }
+
+
+   
+   //**********************************************
+   // LAST STEP:  All the supporting functions are here
+   //********************************************** 
+
+   // When the user presses the radio button
+   // We need to update the Question object with the given_answer
+   // this function will be invoked whenever the user selects a choice
+   // we also need to validate the buttons here
+   // since the SUBMIT button may have to be enabled
+   function updateGivenAnswer(value) {
+      mini_question_bank[index].given_answer = value;
+      validateButtons();
+   }
+
+   // Validation of all the three buttons - Previous, Submit and Next - happen here
+   // Validation depends on the index and whether all questions are answered by the user
+   function validateButtons() {
+      // if index == 0, disable the previous button
+      if (index == 0) {
+         previous_btn.disabled = true;
+      } else {
+         previous_btn.disabled = false;
+      }
+
+      // if index == HOW_MANY, disable the next button
+      if (index == HOW_MANY-1) {
+         next_btn.disabled = true;
+      } else {
+         next_btn.disabled = false;
+      }
+
+      // if all questions are answered, then enable the submit button
+      var are_all_questions_answered = true;
+      for (var i=0; i < mini_question_bank.length; i=i+1)
+      {
+         if (mini_question_bank[i].given_answer == "X")
+         {
+            are_all_questions_answered = false;
+            break;
+         }
+      }
+
+      if (are_all_questions_answered)
+      {
+         submit_btn.disabled = false;
+      }
+   }
+</script>

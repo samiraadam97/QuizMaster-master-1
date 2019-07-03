@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title> JavaScript Quiz (About Smriti Samtani) </title>
+</head>
+
+<script>
+    //****************************************************
+    //  This block helps to catch the syntax errors.
+    //  These errors are reported back to the web page
+    //****************************************************
+    window.onerror = function (e) {
+        document.write('There\'s an error: ', e, '</br>')
+    };
+</script>
+
+<style>
+    .image {
+        width: 300px;
+        height: 300px;
+        padding: 20px 20px 20px 20px;
+    }
+
+    .table_2 {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #welcome {
+        text-align: center;
+        color: darkorange;
+    }
+
+    #table_1 {
+        border-spacing: 100px 0px;
+    }
+
+    .directions {
+        text-align: center;
+        padding: 20px 40px 0px 40px;
+        color: darkgreen;
+    }
+
+    .description {
+        padding: 0px 40px 0px 0px;
+        color: darkgoldenrod;
+    }
+
+    #silc {
+        width: 300;
+        height: 85;
+    }
+
+    .Name {
+        color: darkgreen;
+    }
+</style>
+
+<body>
+    <!--this is the tool bar-->
+
+    <table id="table_1">
+        <tr>
+            <td>
+                <image id="silc" src="../Images/index_images/silc_home.jpg"></image>
+            </td>
+            <!--Link To About-->
+            <td id="text"><a href="../about.html">About</a></td>
+            <!--Link To Help-->
+            <td id="text"><a href="">Help</a></td>
+        </tr>
+    </table>
+    <h1 id="welcome">About Smriti Samtani</h1>
+</body>
+
+<script>
+
+    function Student(name, image_src, description) {
+        this.name = name;
+        this.image_src = image_src;
+        this.description = description;
+
+        this.toString = function () {
+            document.write("<table class = 'table_2'>");
+            document.write("<tr>");
+            document.write("<td><a title = '" + this.name + "'><image class = 'image' src='" + this.image_src + "'></image></a></td>");
+            document.write("<td><h4 class = 'description'>" + this.description + "</h4></td>");
+            document.write("</tr></table>");
+        }
+    }
+
+    var s1 = new Student(
+        "Smriti Samtani",
+        "../Images/about_images/smriti.jpg",
+        "Smriti Samtani attends Mahtomedi High School. She is a freshman and is a part of many clubs and activities such as Robotics, Students Against Destructive Decisions, (SADD), Track and Field, and Math Team. In her spare time, Smriti draws and paints, she also loves to listen to music and sing. She loves to apply henna on her family and friends. When she is not doing that, Smriti can be found with her nose in a book. Smriti loves to travel and hopes to go on a huge road trip across the United States once she can drive."
+    );
+
+    function toStringi() {
+        return s1.toString()
+    }
+
+    toStringi();
+</script>
