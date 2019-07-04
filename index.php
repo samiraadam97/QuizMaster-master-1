@@ -79,7 +79,7 @@ $page_title = "QuizMaster";
         echo "</tr><tr>";
 	}
 	echo "<td><a href='" . $row["topic"] . "_quiz.html' title='" . $row["topic"] . "'>";
-    echo "<img class='image' id='" . $row["topic"] . "_quiz' src='Images/index_images/" . $row["image_name"] . "." . $row["image_ext"] . "' />";
+    echo "<img class='image' id='" . $row["topic"] . "_quiz' src='Images/index_images/" . $row["image_name"] . "' />";
     echo "<div id='title'>" . $row["topic"] . "</div></a></td>";
 
 }
