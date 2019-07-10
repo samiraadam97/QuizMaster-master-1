@@ -2,7 +2,7 @@
 
 require 'db_config.php';
 
-$sql = 'select * from topics';
+$sql = 'select * from topics order by sequence asc';
 
 $result = run_sql($sql);
 $cols = run_sql("SELECT value from preferences where name='NO_OF_TOPICS_PER_ROW'")->fetch_array()[0];
@@ -12,7 +12,8 @@ $page_title = "QuizMaster";
     <!DOCTYPE HTML>
 <html>
 <head>
-<title><?php echo htmlspecialchars($page_title);?></title>
+<title><?php echo htmlspecialchars($page_title);
+	echo 'hello';?></title>
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->

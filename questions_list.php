@@ -23,11 +23,24 @@ $result = run_sql($sql);
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
-
+	<style>
+	 a {
+		 padding: 5px 10px;
+		 border: 1px solid black;
+		 border-radius: 5px;
+		 background: linear-gradient(cyan,navy);
+		 color: aliceblue;
+		 text-decoration: none;
+		 font-family: sans-serif;
+	 }
+	 .table {
+		margin: 25px 0 !important; 
+	 }
+	</style>
 </head>
 
 <body>
-<a href='create_question.php' >Create Question</a>
+<a href='create_question.php' class="create_question" >Create Question</a>
 
 <table class="table table-striped" id="questions_table">
             <div class="table responsive">
@@ -41,11 +54,13 @@ $result = run_sql($sql);
 		<th>Choice 4</th>
 		<th>answer</th>
 		<th>image_name</th>
+		<th></th>
 	</tr>
 	</thead>
                 <tbody>
 <?php 
 	while($row = $result->fetch_assoc()){
+		$id=$row['id'];
 		echo '<tr>';
 		echo '<td>'.$row['question'].'</td>';
 		echo '<td>'.$row['choice_1'].'</td>';
@@ -54,6 +69,7 @@ $result = run_sql($sql);
 		echo '<td>'.$row['choice_4'].'</td>';
 		echo '<td>'.$row['answer'].'</td>';
 		echo '<td>'.$row['image_name'].'</td>';
+		echo '<td><a href="update_question.php?id='.$id.'">edit</a><a href="delete_question.php?id='.$id.'">delete</a></td>';
 		echo '</tr>';
 		
 	}

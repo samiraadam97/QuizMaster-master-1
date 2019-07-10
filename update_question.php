@@ -1,10 +1,8 @@
 <?php
-$page_title = "Questions";
-
-require_once("db_config.php");
-
-if ($_SERVER['REQUEST_METHOD'] == "POST"){
-  	//get values
+$page_title = "update question";
+require 'db_config.php';
+if(isset($_POST['id'])){
+	//get values
 	$question = $db->real_escape_string(trim($_POST["question"]));
   	$choice_1 = $db->real_escape_string(trim($_POST["choice_1"]));
   	$choice_2 = $db->real_escape_string(trim($_POST["choice_2"]));
@@ -13,9 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
 	$answer = $db->real_escape_string(trim($_POST["answer"]));
 	$image_name = $db->real_escape_string(trim($_POST["image_name"]));
 	$topic = $db->real_escape_string(trim($_POST["topic"]));
-  
-  	//validate
-  	$error = "";
+    $id = $db->real_escape_string(trim($_POST["id"]));
+	//validate form
+	  	$error = "";
   	if (!strlen($question)){
     	$error .= "Please type a question<br>";
     }
@@ -37,12 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
 	if (!strlen($image_name)) {
 		$error .= "Please enter an image name<br>";
 	}	
-	
-  
-  	//no validation errors?
+	//update
+	//no validation errors?
   	if (!strlen($error)){
     	//actually try to insert...
-      	$sql = "insert into questions(choice_1,choice_2,choice_3,choice_4,answer,image_name,question,topic) values ('$choice_1','$choice_2','$choice_3','$choice_4','$answer','$image_name','$question',$topic);"; //TODO: write valid insert sql
+      	$sql = "update questions Set choice_1 = '$choice_1',choice_2 = '$choice_2',choice_3 = '$choice_3',choice_4 = '$choice_4' ,answer = '$answer',image_name = '$image_name',question = '$question',topic = '$topic' where id=$id;"; //TODO: write valid insert sql
       	$success = run_sql($sql);
       	if ($success){
 			
@@ -55,19 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
         }
     }
 }
-
+	
 
 
 $sql = 'select * from topics order by sequence asc';
 
 $result = run_sql($sql);
 
-// print_r($result); <-- use for debugging and test DB fetching
-
-
-
+$id = $_GET['id'];
+$q = run_sql("SELECT * from questions where id=$id")->fetch_assoc(); 
 ?>
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -105,22 +99,27 @@ $result = run_sql($sql);
 </head>
 
 <body>
-<form method='POST' action='create_question.php'>
+<form method='POST' action='update_question.php'>
+<input type='hidden' name='id' value='<?php echo $id ?>'>
 <select name='topic'>
 <?php
 while($row = $result->fetch_assoc()){
-		echo "<option value='".$row['id']."'>".$row['topic'].'</option>';
+		echo "<option value='".$row['id']."'";
+		if($q['topic'] == $row['id']) {
+			echo " selected";
+		}
+		echo ">".$row['topic'].'</option>';
 }
 	
 ?>
 </select>
-<label>Question: <input name="question"> </label>
-<label>Choice a: <input name="choice_1"> </label>
-<label>Choice b: <input name="choice_2"> </label>
-<label>Choice c: <input name="choice_3"> </label>
-<label>Choice d: <input name="choice_4"> </label>
-<label>Answer: <input name="answer"> </label>
-<label>Image Name: <input name="image_name"> </label>
+<label>Question: <input name="question" value="<?php echo $q['question'] ?>"> </label>
+<label>Choice a: <input name="choice_1" value="<?php echo $q['choice_1'] ?>"> </label>
+<label>Choice b: <input name="choice_2" value="<?php echo $q['choice_2'] ?>"> </label>
+<label>Choice c: <input name="choice_3" value="<?php echo $q['choice_3'] ?>"> </label>
+<label>Choice d: <input name="choice_4" value="<?php echo $q['choice_4'] ?>"> </label>
+<label>Answer: <input name="answer" value="<?php echo $q['answer'] ?>"> </label>
+<label>Image Name: <input name="image_name" value="<?php echo $q['image_name'] ?>"> </label>
 <input type='submit' value='submit'>
 <?php
 if(isset($error)){
