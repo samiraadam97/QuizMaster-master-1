@@ -39,12 +39,12 @@ if(isset($_POST['id'])){
 	//no validation errors?
   	if (!strlen($error)){
     	//actually try to insert...
-      	$sql = "update questions Set choice_1 = '$choice_1',choice_2 = '$choice_2',choice_3 = '$choice_3',choice_4 = '$choice_4' ,answer = '$answer',image_name = '$image_name',question = '$question',topic = '$topic' where id=$id;"; //TODO: write valid insert sql
+      	$sql = "update questions Set choice_1 = '$choice_1',choice_2 = '$choice_2',choice_3 = '$choice_3',choice_4 = '$choice_4' ,answer = '$answer',image_name = '$image_name',question = '$question',topic = '$topic' where id=$id;";
       	$success = run_sql($sql);
       	if ($success){
 			
         	//insert worked; redirect
-          	header("Location: ./questions_list.php"); //TODO: check where to redirect on success
+          	header("Location: ./questions_list.php"); 
           	exit();
         }
       	else {
@@ -127,4 +127,6 @@ if(isset($error)){
 }
 ?>
 </form>
+
 </body>
+</html>

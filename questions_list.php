@@ -7,7 +7,7 @@ $sql = 'select * from questions';
 
 $result = run_sql($sql);
 
-// print_r($result); <-- use for debugging and test DB fetching
+// print_r($result); // <-- use for debugging and test DB fetching
 
 
 
