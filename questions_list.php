@@ -9,8 +9,6 @@ $result = run_sql($sql);
 
 // print_r($result); // <-- use for debugging and test DB fetching
 
-
-
 ?>
 
 <!DOCTYPE HTML>
@@ -32,6 +30,9 @@ $result = run_sql($sql);
 		 color: aliceblue;
 		 text-decoration: none;
 		 font-family: sans-serif;
+	 }
+	  a:active {
+		 background: linear-gradient(navy,cyan);
 	 }
 	 .table {
 		margin: 25px 0 !important; 
