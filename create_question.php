@@ -71,6 +71,26 @@ $result = run_sql($sql);
 <!DOCTYPE HTML>
 <html>
 <head>
+<table id = "table_1">
+		<tbody>
+        <tr>
+            <td>
+			<a href="index.php" title="SILC Quiz Master">
+				<img id = "silc" src="Images/index_images/silc_home.jpg">
+			</a>
+			</td>
+            <!--Link To About-->
+            <td id = "text">
+			<a href = "about.html">About</a>
+			</td>
+            <!--Link To Help-->
+            <td id = "text">
+			<a href = "help.html">Help</a>
+			</td>
+			
+        </tr>
+		</tbody>
+    </table>
 <title><?php echo htmlspecialchars($page_title);?></title>
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -105,6 +125,7 @@ $result = run_sql($sql);
 </head>
 
 <body>
+    
 <form method='POST' action='create_question.php'>
 <select name='topic'>
 <?php
