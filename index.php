@@ -66,6 +66,8 @@ $page_title = "QuizMaster";
             <td id = "text"><a href = "about.html">About</a></td>
             <!--Link To Help-->
             <td id = "text"><a href = "help.html">Help</a></td>
+            <td id = "text"><a href = "about.html">Prefrences</a></td>
+            <td id = "text"><a href = "about.html">Login</a></td>
         </tr>
     </table>
     <h1 id = "welcome">Welcome to QuizMaster</h1>
