@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 $topic = $_GET['topic'];
 
 require 'db_config.php';
@@ -7,20 +7,22 @@ $sql = "select topic from topics where id = '$topic';";
 $result = run_sql($sql);
 $topic_name = $result->fetch_array()[0];
 $page_title = "Quiz " . $topic_name;
-
 $sql = "select value from preferences where name='NO_OF_QUESTIONS_TO_SHOW';";
 $result = run_sql($sql);
 $num_of_questions = (int)$result->fetch_array()[0];
 $sql = "select * from questions where topic = $topic limit $num_of_questions; ";
 $result = run_sql($sql);
-// print_r($result); ---> use for debugging
+// better debugging method below, shows the values of the associative array for each column and each row
+ //while($row=mysqli_fetch_assoc($result)){
+ //printf ("([%s] [%s] [%s] [%s] [%s]), ",$row["choice_1"],$row["choice_2"], $row['choice_3'],$row['choice_4'],$row['answer']);}
+  // another debugging method below
+  // print_r(mysqli_fetch_assoc($result)); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <title><?php echo htmlspecialchars($page_title);?></title>
-</head>
 
 
 <script>
@@ -37,27 +39,24 @@ $result = run_sql($sql);
    <!--This is the tool bar-->
    <!--**************************************************** -->
 <style>
-   #table_1 {
-      border-spacing: 200px 0px;
-         }
-
+header {
+			text-align:center;
+		}
+header a{
+			display:inline-block;
+			margin:10px;
+		}			
+header input {
+			display:block;
+			text-align:center;
+		}
 </style>
-   <table id = "table_1">
-      <tr>
-         <td>
-                  <a href = "index.html"  title = "SILC Quiz Master"> 
-                       <image id="silc" src="Images/index_images/silc_home.jpg"></image>
-                   </a>
-          </td>
-          <!--Link To Preferences-->
-          <td id = "text"><a href = "">Preferences</a></td>
-          <!--Link To About-->
-          <td id = "text"><a href = "about.html">About</a></td>
-          <!--Link To Help-->
-          <td id = "text"><a href = "help.html">Help</a></td>
-      </tr>
-   </table>
+</head>
+		
 <body>
+<?php
+include 'header.inc.php';
+?>
 
    <!--**************************************************** -->
    <!-- This is a placeholder question.  -->
@@ -219,7 +218,7 @@ while($row = $result->fetch_assoc()){
    // STEP 7:  Select HOW_MANY questions 
    //**********************************************
    var mini_question_bank = question_bank.slice(0, HOW_MANY);
-
+	var score_quiz = [];
 
 
    //**********************************************
@@ -266,26 +265,40 @@ while($row = $result->fetch_assoc()){
       for (var i = 0; i < mini_question_bank.length; i++) {
          if (mini_question_bank[i].answer == mini_question_bank[i].given_answer) {
             count = count + 1;
+			score_quiz[i] = true;
          }
+		 else {
+			 score_quiz[i] = false;
+			 var answer = mini_question_bank[i].answer;
+		 }
       }
       document.write("<style> #table_1 {border-spacing: 200px 0px;} .congrats { text-align: center; } #congratsi {height: 200px; width: 200px; display: block; margin-left: auto; margin-right: auto;}</style>");
       document.write("<table id = 'table_1'><tr><td><img id = 'silc' src='Images/index_images/silc_home.jpg'></td><td id = 'text'><a href = 'about.html'>About</a></td><td id = 'text'><a href = 'help.html'>Help</a></td></tr></table>");
       document.write("<br> <p class = 'congrats' >Congratulations</p>");
       document.write("<img id = 'congrats' src='Images/about_images/thumbsup.jpg'>")
       document.write("<p class = 'congrats'>Your final score: ", count, " out of ", HOW_MANY, "</p>");
+	  
+	  score_quiz.forEach((item,index) => {
+		  var isCorrect = (item)?"Correct":"Incorrect" + "<br>" + "Correct answer is " + answer;
+	  document.write("<p>Question number "+(index+1)+" : "+isCorrect+"</p>");
+	  	//	  if((item) == false){
+		 // document.write("Correct answer is: " + score_quiz[i].answer;
+		 // }
+	  });
+	  
    }
 
    //**********************************************
    // STEP 12:  This is the common function called by 
    //           Page Load, Previous and Next buttons
    //**********************************************
-
+	
    function updateQuestion(selected_question) {
       // Get the Question at the bookmark/index
       var selected_question = mini_question_bank[index];
 
       // now update the default question with the selected question
-      document.getElementById("question").innerHTML = selected_question.question;
+      document.getElementById("question").innerHTML = "question number: " + (index+1) + "<br>" + selected_question.question;
       document.getElementById("choice_1_label").innerHTML = selected_question.choice_1;
       document.getElementById("choice_2_label").innerHTML = selected_question.choice_2;
       document.getElementById("choice_3_label").innerHTML = selected_question.choice_3;
