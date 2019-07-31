@@ -1,4 +1,5 @@
 <?php
+session_start();
 $page_title = "Questions";
 
 require 'db_config.php';
@@ -22,7 +23,7 @@ $result = run_sql($sql);
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
 	<style>
-	 a {
+	 main a {
 		 padding: 5px 10px;
 		 border: 1px solid black;
 		 border-radius: 5px;
@@ -31,9 +32,16 @@ $result = run_sql($sql);
 		 text-decoration: none;
 		 font-family: sans-serif;
 	 }
-	  a:active {
+	  main a:active {
 		 background: linear-gradient(navy,cyan);
 	 }
+	 header {
+		 text-align:center;
+	}
+	 header a{
+			display:inline-block;
+			margin:10px;
+		}
 	 .table {
 		margin: 25px 0 !important; 
 	 }
@@ -41,6 +49,10 @@ $result = run_sql($sql);
 </head>
 
 <body>
+		<?php
+		include "header.inc.php";
+		?>
+<main>		
 <a href='create_question.php' class="create_question" >Create Question</a>
 
 <table class="table table-striped" id="questions_table">
@@ -78,7 +90,7 @@ $result = run_sql($sql);
                 </tbody>
             </div>
         </table>
-
+</main>
 <!-- Bootstrap core JavaScript -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
